@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    
+        <meta charset = "utf-8">
+        
+        <title>Color Picker</title>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  
+        
+        
+        
+        <style type="text/css">
+            
+            /* red square to test color picker */
+            #test {
+                width: 400px;
+                height: 400px;
+                background-color: red;
+            }
+            
+            /*
+            * COLOR PICKER style
+            */
+            
+            .colorNav {
+                position: fixed;
+                left: 50%;
+                margin-left: -250px;
+                bottom: -250px;
+                width:500px;
+                height: 200px;
+                border-radius: 15px;
+                background-color: #eaebed;
+                display: flex;
+                box-shadow: 0 0 18px 0 rgba(0,0,0,0.16), 0 0 18px 0 rgba(0,0,0,0.5);
+                -webkit-transition: bottom .5s ease-in;
+                -moz-transition: bottom .5s ease-in;
+                -o-transition: bottom .5s ease-in;
+                -ms-transition: bottom .5s ease-in;
+                transition: bottom .5s ease-in;
+            }
+            .colorContainer {
+
+                width: 300px;
+                display:block;
+                margin-left:50px;
+                margin-top: 10px;
+            }
+
+            #colorSwatch {
+                width: 80px;
+                height: 80px;
+                background-color: rgb(128,128,128);
+                margin-top: 10px;
+                margin-left: 20px;
+                border: 1px solid white;
+                border-radius: 10px;
+            }
+
+            .slider {
+                margin:5px;
+                -webkit-appearance: none; 
+                appearance: none;
+                width: 100%; 
+                height: 15px;
+                outline: none;
+                -webkit-transition: .2s; 
+                transition: opacity .2s;
+            }
+            input[type=range]::-moz-range-track {
+                background-color: transparent;
+
+            }
+
+            .slider::-webkit-slider-thumb {
+                -webkit-appearance: none; 
+                appearance: none;
+                width: 8px; 
+                height: 20px; 
+                background: white; 
+                border: 1px solid black;
+                cursor: pointer; 
+                border-radius: 5px;
+            }
+
+            .slider::-moz-range-thumb {
+                width: 8px;
+                -moz-appearance:none;
+                height: 20px; 
+                background: white; 
+                border: 1px solid black;
+                cursor: pointer; 
+                border-radius: 5px;
+            }
+
+
+
+            #colorRed {
+                background-image: linear-gradient(to right, black , #ff0000);
+                color:transparent;
+            }
+
+            #colorGreen {
+                background-image: linear-gradient(to right, black , #00ff00);
+            }
+
+            #colorBlue {
+                background-image: linear-gradient(to right, black , #0000ff) !important;
+
+            }
+            
+            
+        </style>
+    </head>
+    
+    <body>
+        
+        
+        
+        <button type="button" id="colorButton">Color Picker on/off</button>
+        
+        
+        <div class="colorable" id="test">
+            <p>select a color using the tool and click in the div to set new color</p>
+        </div>
+        
+        
+        <footer>
+            <div class="colorNav">
+                <div class="colorContainer">
+                    <div>
+                        <input type=range id="colorRed"  class="slider" min="0" max="255" value="128">
+                    </div>
+
+                    <div>
+                        <input type=range id="colorGreen"  class="slider" min="0" max="255" value="128">
+                    </div>
+
+                    <div>
+                        <input type=range id="colorBlue"  class="slider" min="0" max="255" value="128">
+                    </div>
+
+                </div>
+
+                <div id="colorSwatch"></div>
+                
+            </div>
+        </footer>
+        
+            
+        
+
+        
+        <script type=text/javascript>
+            
+            //button used to unhide and activate color picker
+            var isColorPickerOpen = false;
+            $('#colorButton').click(function() {
+                if(!isColorPickerOpen){
+                    $('.colorNav').css('bottom', '-100px');
+                    isColorPickerOpen = true;
+                } else {
+                    $('.colorNav').css('bottom', '-250px');
+                    isColorPickerOpen = false;
+                }
+            });
+            
+            
+            // if color picker is active, any element with the class "colorable" will change its color to the one shown in #colorSwatch on click
+            $('body').click(function( event ) {    
+                if(isColorPickerOpen && $(event.target).hasClass('colorable'))  
+                    $(event.target).css('background-color', selectedColor); 
+            });
+        
+            
+            /* 
+            * COLOR PICKER
+            * update the color swatch based on the rgb values provided by the sliders
+            */
+            
+            var sliderRed = document.getElementById("colorRed");
+            var sliderGreen = document.getElementById("colorGreen");
+            var sliderBlue = document.getElementById("colorBlue");
+            
+            var selectedColor = $('#colorSwatch').css('background-color');
+            
+            $('#colorSwatch').css('background-color', 'rgb(' + sliderRed.value + ', ' + sliderGreen.value + ', ' + sliderBlue.value + ')')
+            function updateSwatch(r, g, b) {
+                $('#colorSwatch').css('background-color', 'rgb(' + r + ', ' + g + ', ' + b + ')')
+            };
+            
+            sliderRed.oninput = function() {
+                updateSwatch(sliderRed.value, sliderGreen.value, sliderBlue.value);
+                selectedColor = $('#colorSwatch').css('background-color');
+            };
+            sliderGreen.oninput = function() {
+                updateSwatch(sliderRed.value, sliderGreen.value, sliderBlue.value);
+                selectedColor = $('#colorSwatch').css('background-color');
+            };
+            sliderBlue.oninput = function() {
+                updateSwatch(sliderRed.value, sliderGreen.value, sliderBlue.value);
+                selectedColor = $('#colorSwatch').css('background-color');
+            };
+            
+            
+            
+        </script>
+        
+    </body>
+</html>
