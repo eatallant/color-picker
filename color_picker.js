@@ -1,5 +1,5 @@
 /*
-* full code is in color_picker.html
+* tested with jquery 3.3.1
 */
 
 //button used to unhide and activate color picker
